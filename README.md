@@ -203,7 +203,7 @@ These paths are referenced in the project’s **Makefile** and in **`launch-tema
 
 ### `launch-tema2.sh` Changes
 
-- **Kernel**: Uses `vmlinuz-tema2` instead of `vmlinuz-test`:
+**Kernel**: Uses `vmlinuz-tema2` instead of `vmlinuz-test`:
 
 ```bash
 KERNEL_FILE="vmlinuz-tema2"
