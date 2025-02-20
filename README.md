@@ -56,7 +56,7 @@ Below is the layout of the project’s files and directories, as seen in the scr
 **Explanation:**
 
 1. **`bin/`**: Contains compiled binaries and scripts necessary for system operation.
-2. **`assets/`**: May store disk images, icons, or other graphical assets.
+2. **`assets/`**: Images for this README and Google Cloud API Key Platform.
 3. **`src/raspberrypi3-64-overlay/`**: The overlay directory for **Buildroot**, containing:
    - `etc/`: System configuration files.
    - `opt/`: Python scripts and web-related files.
