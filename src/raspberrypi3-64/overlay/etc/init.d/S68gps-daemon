@@ -1,0 +1,41 @@
+#!/bin/sh
+
+DAEMON_PATH="/opt/gps-daemon.py"
+DAEMON="python3 $DAEMON_PATH"
+PIDFILE="/var/run/gps-daemon.pid"
+
+start() {
+    echo "Starting gps-daemon..."
+    start-stop-daemon --start --background --make-pidfile --pidfile $PIDFILE --exec $DAEMON
+    echo "gps-daemon started."
+}
+
+stop() {
+    echo "Stopping gps-daemon..."
+    start-stop-daemon --stop --pidfile $PIDFILE
+    echo "gps-daemon stopped."
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if [ -e $PIDFILE ]; then
+            echo "gps-daemon is running."
+        else
+            echo "gps-daemon is not running."
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac

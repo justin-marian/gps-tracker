@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Data Viewer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.4;
+            font-size: 13px;
+        }
+    
+        header {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+    
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            letter-spacing: 0.5px;
+        }
+    
+        header img {
+            width: 35px;
+            height: 35px;
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+    
+        .gps-grid {
+            grid-column: span 4;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .gps-section, #map-container {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            font-size: 0.85em;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .gps-section h2 {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 3px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+    
+        .gps-section p {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            margin: 5px 0;
+            font-size: 0.85em;
+        }
+    
+        .gps-section:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-color: #4CAF50;
+        }
+    
+        .map-section {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 2px solid #81c784;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        #map {
+            width: 80%;
+            height: 80%;
+            margin: 0 auto;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        #map-container {
+            grid-column: span 4;
+            height: 350px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        footer {
+            text-align: center;
+            padding: 5px 0;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.svgrepo.com/show/354258/raspberry-pi.svg" alt="Raspberry Pi Logo">
+        <h1>GPS Data Viewer</h1>
+        <img src="https://www.svgrepo.com/show/223049/maps-gps.svg" alt="Maps GPS Logo">
+    </header>
+    
+    <div class="container">
+        <div class="gps-grid">
+            <div class="gps-section" id="gga-section">
+                <h2>🌍 GGA</h2>
+                <h3>Global Positioning System.</h3>
+                <p><strong>Latitude:</strong> <span id="gga-latitude">Loading...</span></p>
+                <p><strong>Longitude:</strong> <span id="gga-longitude">Loading...</span></p>
+                <p><strong>Altitude:</strong> <span id="gga-altitude">Loading...</span></p>
+                <p><strong>Number of Satellites:</strong> <span id="gga-num-satellites">Loading...</span></p>
+                <p><strong>Fix Quality:</strong> <span id="gga-fix-quality">Loading...</span></p>
+                <p><strong>HDOP:</strong> <span id="gga-hdop">Loading...</span></p>
+                <p><strong>Geoid Separation:</strong> <span id="gga-geoid-separation">Loading...</span></p>
+                <p><strong>Age of Differential Correction:</strong> <span id="gga-age-of-diff-corr">Loading...</span></p>
+                <p><strong>Station ID:</strong> <span id="gga-station-id">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="gsa-section">
+                <h2>🛰️ GSA</h2>
+                <h3>Accuracy and satellites.</h3>
+                <p><strong>Mode:</strong> <span id="gsa-mode">Loading...</span></p>
+                <p><strong>Fix Type:</strong> <span id="gsa-fix-type">Loading...</span></p>
+                <p><strong>Satellites Used:</strong> <span id="gsa-satellites-used">Loading...</span></p>
+                <p><strong>PDOP:</strong> <span id="gsa-pdop">Loading...</span></p>
+                <p><strong>HDOP:</strong> <span id="gsa-hdop">Loading...</span></p>
+                <p><strong>VDOP:</strong> <span id="gsa-vdop">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="gsv-section">
+                <h2>🛰️ GSV</h2>
+                <h3>Visible satellites.</h3>
+                <p><strong>Number of Messages:</strong> <span id="gsv-num-messages">Loading...</span></p>
+                <p><strong>Message Number:</strong> <span id="gsv-message-number">Loading...</span></p>
+                <p><strong>Number of Satellites:</strong> <span id="gsv-num-satellites">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="gll-section">
+                <h2>📍 GLL</h2>
+                <h3>Coordinates and time.</h3>
+                <p><strong>Latitude:</strong> <span id="gll-latitude">Loading...</span></p>
+                <p><strong>Longitude:</strong> <span id="gll-longitude">Loading...</span></p>
+                <p><strong>Time (UTC):</strong> <span id="gll-time">Loading...</span></p>
+                <p><strong>Status:</strong> <span id="gll-status">Loading...</span></p>
+                <p><strong>Mode:</strong> <span id="gll-mode">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="map-container">
+                <h2>🗺️ Map</h2>
+                <div id="map"></div>
+            </div> 
+
+            <div class="gps-section" id="hdt-section">
+                <h2>🛠️ HDT: Heading - True</h2>
+                <h3>True direction.</h3>
+                <p><strong>Heading (Degrees):</strong> <span id="hdt-heading">Loading...</span></p>
+                <p><strong>Status:</strong> <span id="hdt-status">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="rmc-section">
+                <h2>🗓️ RMC</h2>
+                <h3>Navigation and time.</h3>
+                <p><strong>Latitude:</strong> <span id="rmc-latitude">Loading...</span></p>
+                <p><strong>Longitude:</strong> <span id="rmc-longitude">Loading...</span></p>
+                <p><strong>Speed:</strong> <span id="rmc-speed">Loading...</span></p>
+                <p><strong>Course:</strong> <span id="rmc-course">Loading...</span></p>
+                <p><strong>Date:</strong> <span id="rmc-date">Loading...</span></p>
+                <p><strong>Status:</strong> <span id="rmc-status">Loading...</span></p>
+                <p><strong>Magnetic Variation:</strong> <span id="rmc-magnetic-variation">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="vtg-section">
+                <h2>🧭 VTG</h2>
+                <h3>Course and speed.</h3>
+                <p><strong>True Course:</strong> <span id="vtg-course-true">Loading...</span></p>
+                <p><strong>Reference True:</strong> <span id="vtg-reference-true">Loading...</span></p>
+                <p><strong>Magnetic Course:</strong> <span id="vtg-course-magnetic">Loading...</span></p>
+                <p><strong>Reference Magnetic:</strong> <span id="vtg-reference-magnetic">Loading...</span></p>
+                <p><strong>Speed (Knots):</strong> <span id="vtg-speed-knots">Loading...</span></p>
+                <p><strong>Unit Knots:</strong> <span id="vtg-unit-knots">Loading...</span></p>
+                <p><strong>Speed (Km/h):</strong> <span id="vtg-speed-kmh">Loading...</span></p>
+                <p><strong>Unit Km/h:</strong> <span id="vtg-unit-kmh">Loading...</span></p>
+            </div>
+
+            <div class="gps-section" id="zda-section">
+                <h2>🕒 ZDA</h2>
+                <h3>UTC time and offset.</h3>
+                <p><strong>Time (UTC):</strong> <span id="zda-time">Loading...</span></p>
+                <p><strong>Day:</strong> <span id="zda-day">Loading...</span></p>
+                <p><strong>Month:</strong> <span id="zda-month">Loading...</span></p>
+                <p><strong>Year:</strong> <span id="zda-year">Loading...</span></p>
+                <p><strong>Local Time Offset:</strong> <span id="zda-local-time-offset">Loading...</span></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 GPS Tema2 SI | All rights reserved.
+    </footer>
+
+    <script>
+        let map, marker, isMapInitialized = false, streetView;
+    
+        function initMap() {
+            const defaultPosition = { lat: 0, lng: 0 };
+    
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: defaultPosition,
+                gestureHandling: 'greedy',
+                streetViewControl: true,
+            });
+    
+            marker = new google.maps.Marker({
+                position: defaultPosition,
+                map: map,
+                title: "Current Position",
+            });
+    
+            streetView = map.getStreetView();
+
+            streetView.addListener("position_changed", () => {
+                const position = streetView.getPosition();
+                if (position) {
+                    console.log(`Pegman dropped at: ${position.lat()}, ${position.lng()}`);
+                }
+            });
+        }
+    
+        function updateMap(latitude, longitude) {
+            const position = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+            if (!isNaN(position.lat) && !isNaN(position.lng)) {
+                marker.setPosition(position);
+                if (!isMapInitialized) {
+                    map.setCenter(position);
+                    isMapInitialized = true;
+                }
+            }
+        }
+    
+        function updateGpsData() {
+            fetch('/api/gps')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    Object.entries(data).forEach(([type, fields]) => {
+                        Object.entries(fields).forEach(([key, value]) => {
+                            const elementId = `${type.toLowerCase()}-${key.replace(/_/g, '-')}`;
+                            const element = document.getElementById(elementId);
+                            if (element) {
+                                if (key === 'latitude' || key === 'longitude') {
+                                    element.textContent = value ? `${value.toFixed(4)}°` : 'Unknown';
+                                } else {
+                                    element.textContent = value || 'Unknown';
+                                }
+                            }
+                        });
+                        if (type === 'GGA' && fields.latitude && fields.longitude) {
+                            updateMap(fields.latitude, fields.longitude);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching GPS data:', error));
+        }
+    
+        updateGpsData();
+        setInterval(updateGpsData, 500);
+    //!!! KEY !!! - use your own key please :))
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=<HERE_THE_API_KEY>initMap"></script>
+</body>
+</html>

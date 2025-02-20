@@ -1,0 +1,41 @@
+#!/bin/sh
+
+SERVER_PATH="/opt/gps-server.py"
+SERVER="python3 $SERVER_PATH"
+PIDFILE="/var/run/gps-server.pid"
+
+start() {
+    echo "Starting gps-server..."
+    start-stop-daemon --start --background --make-pidfile --pidfile $PIDFILE --exec $SERVER
+    echo "gps-server started."
+}
+
+stop() {
+    echo "Stopping gps-server..."
+    start-stop-daemon --stop --pidfile $PIDFILE
+    echo "gps-server stopped."
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if [ -e $PIDFILE ]; then
+            echo "gps-server is running."
+        else
+            echo "gps-server is not running."
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
