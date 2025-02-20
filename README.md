@@ -86,7 +86,7 @@ Below is the layout of the project’s files and directories, as seen in the scr
 
 **Buildroot Configuration Highlights**:
 
-1. **Cross-Compilation**: Buildroot automatically cross-compiles the entire userspace for the ARMv8 architecture (64-bit).
+1. **Cross-Compilation**: Buildroot automatically cross-compiles the entire userspace for the ARMv8.
 2. **Filesystem Format**: The output is an EXT4 filesystem image (`rootfs.ext4`), suitable for mounting as the root partition on an SD card.
 3. **Customization**: By selecting or deselecting packages in the Buildroot menuconfig, the final size and capabilities of the image are controlled.
 
@@ -156,7 +156,7 @@ make dtbs
 
 ### 3.1. Kernel Source and Configuration
 
-- A **v6.12 Linux kernel** was used, fetched from the official [Linux GitHub repository](https://github.com/torvalds/linux/), using a verified tag for that release.
+- A **v6.12 Linux kernel** was used, fetched from the official [Linux GitHub repository](https://github.com/torvalds/linux/), verified tag for that release.
 - Main adjustments include:
   - Enabling the custom kernel option and disabling auto versioning (e.g., `-si-justin-marian.popescu`).
   - Specifying the location of the kernel tar.xz archive.
@@ -181,7 +181,7 @@ Through kernel and system configurations, several extended features have been en
 - **Secure Remote Access** (SSH) with port forwarding via **OpenSSH** and **AutoSSH**.
 - **DHCP Client** on `eth0` for automatic IP assignment.
 - **Python/Flask** environment for hosting a lightweight web server to display GPS data.
-- **IPv4/IPv6/TCP/Bluetooth** remain enabled by default for more robust connectivity, even if not directly used in this project.
+- **IPv4/IPv6/TCP/Bluetooth** remain enabled by default for more robust connectivity.
 
 ---
 
@@ -256,7 +256,7 @@ ROOTDEV="mmcblk0"
 
 Below are some extra notes and features included in the project, derived from the extended documentation:
 
-- **MD5-Encrypted Password**: The system uses `tema2` as the default password, encrypted in `/etc/passwd` and `/etc/shadow`.
+- **MD5 Password**: The system uses `tema2` as the default password, encrypted in `/etc/passwd` and `/etc/shadow`.
 - **AutoSSH**: Can maintain persistent SSH tunnels or port-forwards, which is helpful for remote management.
 - **Udev Network Rules**: The custom file `mama_mea.rules` ensures that the primary network interface is always recognized as `eth0`, preventing name conflicts (e.g., `eth1`, `enxXXXX`, etc.).
 - **Partitioning**: The final SD card image uses a single root partition (`mmcblk0`), making it simpler to reference in scripts (`ROOTDEV="mmcblk0"`).
