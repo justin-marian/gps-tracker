@@ -1,6 +1,6 @@
 # <img src="https://www.svgrepo.com/show/354258/raspberry-pi.svg" alt="Raspberry Pi Logo" width="40" height="40" style="vertical-align:middle" /> **GPS Data Viewer** <img src="https://www.svgrepo.com/show/223049/maps-gps.svg" alt="Maps GPS Logo" width="40" height="40" style="vertical-align:middle" />
 
-This document describes the setup and configuration of a GPS tracker project running on a Raspberry Pi 3B (`bcm2837-rpi-3-b`) platform.
+Setup and configuration of a GPS tracker project running on a Raspberry Pi 3B (`bcm2837-rpi-3-b`) platform.
 It includes details on how the **RootFS**, **custom Kernel**, **Overlay** structure, and the **App Daemon** for GPS data collection and display were implemented.
 
 > **References**:
@@ -10,8 +10,7 @@ It includes details on how the **RootFS**, **custom Kernel**, **Overlay** struct
 > - [🔗 Buildroot Documentation](https://buildroot.org/docs.html)
 >
 
-Below is the layout of the project’s files and directories, as seen in the screenshot.  
-All **Buildroot** configuration details are found in **`buildroot_config`**, while all **Linux kernel** configuration details reside in **`kernel_config`**.
+Below is the layout of the project’s files and directories, as seen in the screenshot. All **Buildroot** configuration details are found in **`buildroot_config`**, while all **Linux kernel** configuration details reside in **`kernel_config`**.
 
 ```bash
 /
