@@ -256,7 +256,7 @@ ROOTDEV="mmcblk0"
 
 Below are some extra notes and features included in the project, derived from the extended documentation:
 
-- **MD5 Password**: The system uses `tema2` as the default password, encrypted in `/etc/passwd` and `/etc/shadow`.
+- **MD5 Password**: Use `tema2` as the default password, encrypted in `/etc/passwd` and `/etc/shadow`.
 - **AutoSSH**: Can maintain persistent SSH tunnels or port-forwards, which is helpful for remote management.
 - **Udev Network Rules**: The custom file `mama_mea.rules` ensures that the primary network interface is always recognized as `eth0`, preventing name conflicts (e.g., `eth1`, `enxXXXX`, etc.).
 - **Partitioning**: The final SD card image uses a single root partition (`mmcblk0`), making it simpler to reference in scripts (`ROOTDEV="mmcblk0"`).
