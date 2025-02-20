@@ -126,18 +126,18 @@ Several packages were added to fulfill project functionality:
 
 ***(Additional reference for how the custom files are merged into the final RootFS.)***
 
-1. **`/etc` Directory**:  
+1. **`/etc`**:  
    - Initialization scripts (`init.d/`) with unique numbering to avoid collisions.  
    - `passwd` and `shadow` files store authentication details.  
    - `ssh` config ensures OpenSSH starts properly.  
    - `udev/rules.d/mama_mea.rules` enforces consistent naming for `eth0`.
 
-2. **`/opt` Directory**:  
+2. **`/opt`**:  
    - **`gps-daemon`**: Contains the Python script that reads and processes GPS data.  
    - **`gps-server`**: Contains the Flask-based web server script for displaying real-time GPS info.  
    - **`templates/index.html`**: The HTML template for the GPS visualization page.
 
-3. **`/tmp` Directory**:  
+3. **`/tmp`**:  
    - Used by `gps-daemon.py` to store JSON data, updated every second.  
    - `gps-server.py` reads from the same JSON file to serve up-to-date info at `http://<device-ip>:8888`.
 
